@@ -19,17 +19,24 @@ namespace ConsoleApp1
         }
         public async override Task<calclulatorRespose> AveerageNumber(IAsyncStreamReader<calclulatorManyInput> requestStream, ServerCallContext context)
         {
-            int total = 0;
-            int count = 0;
-            while (await requestStream.MoveNext())
+            try
             {
-                int currentNumber = requestStream.Current.Number;
-                total += currentNumber;
-                count++;
-            }
+                int total = 0;
+                int count = 0;
+                while (await requestStream.MoveNext())
+                {
+                    int currentNumber = requestStream.Current.Number;
+                    total += currentNumber;
+                    count++;
+                }
 
-            decimal average = (decimal)total / (decimal)count;
-            return await Task.FromResult(new calclulatorRespose() { SumResult = (int)average });
+                decimal average = (decimal)total / (decimal)count;
+                return await Task.FromResult(new calclulatorRespose() { SumResult = (int)average });
+            }
+            catch(RpcException)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, "number issue"));
+            }
         }
     }
 }
