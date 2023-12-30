@@ -32,24 +32,29 @@ namespace Client
             greet.FirstName = "Visakh";
             greet.LastName = "V A";
 
-            //var greetingReq = new GreetingRequest();
-            //greetingReq.Greeting = greet;
+            var greetingReq = new GreetingRequest();
+            greetingReq.Greeting = greet;
 
             //var res = client.Greet(greetingReq);
             //Console.WriteLine(res.Result);
 
 
 
-            //var client2 = new calclulatorService.calclulatorServiceClient(channel);
-            //var input = new calclulatorInput();
-            //input.Number1 = 1;
-            //input.Number2 = 2;
+            var client2 = new calclulatorService.calclulatorServiceClient(channel);
+            var input = new calclulatorInput();
+            input.Number1 = 1;
+            input.Number2 = 2;
 
 
-            //greetingReq.Greeting = greet;
-
-            //var sumNumber = client2.AddTwoNumber(input);
-            //Console.WriteLine(sumNumber.SumResult);
+            greetingReq.Greeting = greet;
+            try
+            {
+                var sumNumber = client2.AddTwoNumber(input, deadline: DateTime.UtcNow.AddMilliseconds(600));
+            } catch (RpcException e) when (e.StatusCode == StatusCode.DeadlineExceeded)
+            {
+                Console.WriteLine("timemout");
+            }
+            Console.WriteLine(sumNumber.SumResult);
 
             //var resp = client.GreetMany(greetingReq);
 
