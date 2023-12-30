@@ -1,0 +1,21 @@
+syntax = "proto3";
+package calclulator;
+
+
+message calclulatorInput{
+	int32  number1 = 1;
+	int32  number2 = 2;
+}
+
+message calclulatorRespose{
+	int32 sum_result =1;
+}
+
+message calclulatorManyInput{
+	int32 number = 1;
+}
+
+service calclulatorService{
+	rpc AddTwoNumber(calclulatorInput) returns (calclulatorRespose);
+	rpc AveerageNumber(stream calclulatorManyInput) returns (calclulatorRespose);
+}
